@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    runtime: nvidia  # Habilita o uso da GPU
+    environment:
+      - DOMAIN=192.168.123.30:1975
+      - EVENT_VIEWER_URL=http://event-viewer:8080/events/receive
+      - NVIDIA_VISIBLE_DEVICES=all  # Expõe todas as GPUs para o container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
