@@ -51,30 +51,36 @@ app/
    ```
 
 5. Instalar o nvidia-container-toolkit:
-```
-# Configurar o repositório
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+   ```
+   # Configurar o repositório
+   distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+   curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+   curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 
-# Atualizar lista de pacotes
-sudo apt-get update
+   # Atualizar lista de pacotes
+   sudo apt-get update
 
-# Instalar nvidia-container-toolkit
-sudo apt-get install -y nvidia-container-toolkit
+   # Instalar nvidia-container-toolkit
+   sudo apt-get install -y nvidia-container-toolkit
 
-# Reiniciar o Docker para aplicar as alterações
-sudo systemctl restart docker
-```
+   # Reiniciar o Docker para aplicar as alterações
+   sudo systemctl restart docker
+   ```
 
 6. Configurar o Docker para usar o runtime NVIDIA
-```
-# Configure o Docker para usar o NVIDIA Container Toolkit
-sudo nvidia-ctk runtime configure --runtime=docker
+   ```
+   # Configure o Docker para usar o NVIDIA Container Toolkit
+   sudo nvidia-ctk runtime configure --runtime=docker
 
-# Reinicie o Docker para aplicar as alterações
-sudo systemctl restart docker
-```
+   # Reinicie o Docker para aplicar as alterações
+   sudo systemctl restart docker
+   ```
+
+7. Instale o sshpass
+   ```
+   sudo apt install sshpass
+   ```
+   
 > Verficiar se o runtime está disponivel:`docker info | grep -i runtime`
 
 
