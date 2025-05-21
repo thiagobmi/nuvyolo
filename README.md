@@ -50,6 +50,34 @@ app/
    # python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')"
    ```
 
+5. Instalar o nvidia-container-toolkit:
+```
+# Configurar o repositório
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+# Atualizar lista de pacotes
+sudo apt-get update
+
+# Instalar nvidia-container-toolkit
+sudo apt-get install -y nvidia-container-toolkit
+
+# Reiniciar o Docker para aplicar as alterações
+sudo systemctl restart docker
+```
+
+6. Configurar o Docker para usar o runtime NVIDIA
+```
+# Configure o Docker para usar o NVIDIA Container Toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+
+# Reinicie o Docker para aplicar as alterações
+sudo systemctl restart docker
+```
+> Verficiar se o runtime está disponivel:`docker info | grep -i runtime`
+
+
 ## Executando a Aplicação
 
 ### Desenvolvimento
@@ -67,7 +95,14 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 ### Com Docker
 
 ```bash
-docker-compose up -d
+docker compose up -d
+```
+
+## Executando o site demo para visualização dos eventos
+
+```bash
+cd ./event_viewer_demo 
+python main.py
 ```
 
 ## API Endpoints
@@ -101,7 +136,7 @@ curl -X POST "http://localhost:8000/monitor" \
 ### Parar Monitoramento
 
 ```bash
-curl -X POST "http://localhost:8000/stop/1"
+curl -X POST "http://localhost:8000/stop/51"
 ```
 
 ### Verificar Câmeras Monitoradas

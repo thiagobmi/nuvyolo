@@ -155,18 +155,18 @@ class NuvAPIWrapper:
         """
         # Gathering the external '.env' file from the Origin host
         os.system(
-            f"sshpass -p '{cls.origin_password}' scp -o StrictHostKeyChecking=accept-new {cls.origin_username}@{cls.origin_ip}:/usr/local/etc/nvr-origin/.env ."
+            f"sshpass -p '{cls.origin_password}' scp -o StrictHostKeyChecking=accept-new {cls.origin_username}@{cls.origin_ip}:/usr/local/etc/nvr-origin/.env ./.env.nuv"
         )
 
         # Parsing the '.env' file to get the manager token
-        with open(".env") as file:
+        with open(".env.nuv") as file:
             for line in file:
                 if "MANAGER_TOKEN" in line:
                     cls.manager_token = line.split("=")[1].strip()
                     break
 
         # Removing the '.env' file
-        os.system("rm .env")
+        os.system("rm .env.nuv")
 
         return cls.manager_token
 
