@@ -7,7 +7,7 @@ from app.api.routes import cameras
 from app.utils.logging_utils import setup_logger
 from app.external.nuv_api import get_camera_info,initialize_nuv_api
 from app.api.models.camera import CameraInfo, StreamConfig
-
+from app.config.settings import SPECIFICATIONS_PATH
 
 # logger principal
 logger = setup_logger("main")
@@ -21,7 +21,7 @@ async def lifespan_event(app: FastAPI):
     """
     logger.info("Iniciando aplicação")
 
-    initialize_nuv_api()
+    initialize_nuv_api(SPECIFICATIONS_PATH)
     
     yield # Passa o controle da aplicação
     

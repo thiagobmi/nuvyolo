@@ -1,4 +1,5 @@
 import requests
+import json
 from typing import Dict, Any, Optional
 from app.utils.logging_utils import setup_logger
 from app.config import settings
@@ -8,17 +9,54 @@ from app.external.nuv_api_wrapper import NuvAPIWrapper
 
 logger = setup_logger("nuv_api")
 
-def initialize_nuv_api():
-    # Setting basic environment variables
-    NuvAPIWrapper.origin_ip = "192.168.123.30"
-    NuvAPIWrapper.origin_username = "nuv"
-    NuvAPIWrapper.origin_password = "nuv"
-    NuvAPIWrapper.edge_ip = "192.168.123.31"
-    NuvAPIWrapper.org_username = "apple"
-    NuvAPIWrapper.org_password = "apple"
-    NuvAPIWrapper.org_name = "Main"
-    NuvAPIWrapper.org_domain = "main.org"
+def populate_nuv_api_wrapper(specifications: dict) -> None:
+    """Populates the Nuv API Wrapper according to the passed specifications.
+
+    Args:
+        specifications (dict): Benchmark specifications.
+    """
+    NuvAPIWrapper.origin_ip = specifications["api_specifications"]["origin_ip"]
+    NuvAPIWrapper.origin_username = specifications["api_specifications"]["origin_username"]
+    NuvAPIWrapper.origin_password = specifications["api_specifications"]["origin_password"]
+    NuvAPIWrapper.edge_ip = specifications["api_specifications"]["edge_ip"]
+    NuvAPIWrapper.org_username = specifications["api_specifications"]["org_username"]
+    NuvAPIWrapper.org_password = specifications["api_specifications"]["org_password"]
+    NuvAPIWrapper.org_name = specifications["api_specifications"]["org_name"]
+    NuvAPIWrapper.org_domain = specifications["api_specifications"]["org_domain"]
     NuvAPIWrapper.requests_response_times = []
+
+    # Printing the nuv API Wrapper attributes defined according to the passed specifications
+    logger.info(f"Origin IP: {NuvAPIWrapper.origin_ip}")
+    logger.info(f"Edge IP: {NuvAPIWrapper.edge_ip}")
+    logger.info(f"Org Name: {NuvAPIWrapper.org_name}")
+    logger.info(f"Org Domain: {NuvAPIWrapper.org_domain}")
+
+    # NuvAPIWrapper.run_request(method_name="get_manager_token")
+    # NuvAPIWrapper.run_request(method_name="get_org_id")
+    # NuvAPIWrapper.run_request(method_name="get_tribe_id")
+
+
+def read_specifications(json_file_path: str):
+    """
+    Parses the program specifications from a JSON file.
+
+    Args:
+        json_file_path (str): Path to the JSON file.
+
+    Returns:
+        specifications (dict): Dictionary containing the JSON data.
+    """
+    with open(json_file_path, "r") as file:
+        specifications = json.load(file)
+    return specifications
+
+
+
+def initialize_nuv_api(specifications_path: str):
+    # Setting basic environment variables
+
+    specifications = read_specifications(specifications_path)
+    populate_nuv_api_wrapper(specifications)
     
     # Initialize API wrapper
     # TODO: Getting camera info without NuvAPIWrapper?

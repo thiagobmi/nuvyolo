@@ -8,8 +8,9 @@ from requests import get
 load_dotenv()
 
 # Configurações gerais
-API_TITLE = "NUVYOLO"
-API_VERSION = "1.0.0"
+
+API_TITLE = os.getenv("API_TITLE","NUVYOLO")
+API_VERSION = os.getenv("API_VERSION","1.0.0")
 
 def get_env_var(name: str) -> str:
     try:
@@ -19,6 +20,7 @@ def get_env_var(name: str) -> str:
 
 # Dominio do NUV (onde estao as streams)
 DOMAIN = get_env_var("DOMAIN")
+SPECIFICATIONS_PATH = get_env_var("SPECIFICATIONS_PATH")
 
 # Configurações para o envio dos eventos
 SEND_EVENT_URL = get_env_var("SEND_EVENT_URL")
